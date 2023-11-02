@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGenerator", "ExampleGenerator\ExampleGenerator.csproj", "{F9D135AA-6FFC-406C-B837-BCC9F97341FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9D135AA-6FFC-406C-B837-BCC9F97341FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9D135AA-6FFC-406C-B837-BCC9F97341FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9D135AA-6FFC-406C-B837-BCC9F97341FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9D135AA-6FFC-406C-B837-BCC9F97341FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
