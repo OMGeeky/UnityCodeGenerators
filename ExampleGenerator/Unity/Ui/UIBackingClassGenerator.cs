@@ -147,7 +147,10 @@ public partial class {classSymbol.Name}
                 source.Append( $@"        }}
     }}" );
             }
-
+            else
+            {
+                source.AppendLine( $"    public new partial class UxmlFactory : UxmlFactory<{classSymbol.Name}> {{ }}" );
+            }
             source.Append( $@"
     public void QueryElements()
     {{
