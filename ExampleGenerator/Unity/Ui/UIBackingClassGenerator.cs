@@ -49,7 +49,7 @@ using System;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 internal class {Helpers.UxmlTraitAttribute} : Attribute
 {{
-    public {Helpers.UxmlTraitAttribute}(string name, object defaultValue) {{ }}
+    public {Helpers.UxmlTraitAttribute}(string name, object defaultValue=null) {{ }}
 }}
 ";
 
@@ -59,7 +59,7 @@ using System;
 [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
 internal class {Helpers.UiElementAttribute} : Attribute
 {{
-    public {Helpers.UiElementAttribute}(string name) {{ }}
+    public {Helpers.UiElementAttribute}(string name=null) {{ }}
 }}
 ";
 
@@ -121,19 +121,22 @@ using UnityEngine.UIElements;
 namespace {classSymbol.ContainingNamespace}
 {{
 public partial class {classSymbol.Name} 
-{{
-    public new class UxmlFactory : UxmlFactory<{classSymbol.Name}, UxmlTraits> {{ }}
-    public new class UxmlTraits : VisualElement.UxmlTraits
+{{" );
+
+            if ( uxmlTraitFields.Any() )
+            {
+                source.Append( $@"
+    public new partial class UxmlFactory : UxmlFactory<{classSymbol.Name}, UxmlTraits> {{ }}
+    public new partial class UxmlTraits : VisualElement.UxmlTraits
     {{
 " );
 
-            // throw new NotImplementedException( $"elements: {elementFields.Count} uxmlTraits: {uxmlTraitFields.Count}" );
-            foreach ( ISymbol fieldSymbol in uxmlTraitFields )
-            {
-                source.AppendLine( GetAttributeDescription( fieldSymbol , uxmlTraitAttributeSymbol ) );
-            }
+                foreach ( ISymbol fieldSymbol in uxmlTraitFields )
+                {
+                    source.AppendLine( GetAttributeDescription( fieldSymbol , uxmlTraitAttributeSymbol ) );
+                }
 
-            source.Append( $@"
+                source.Append( $@"
         public override void Init(VisualElement ve , IUxmlAttributes bag , CreationContext cc )
         {{
             base.Init( ve , bag , cc );
@@ -141,14 +144,17 @@ public partial class {classSymbol.Name}
 
 " );
 
-            foreach ( ISymbol fieldSymbol in uxmlTraitFields )
-            {
-                source.AppendLine( GetAttributeInitialization( fieldSymbol , uxmlTraitAttributeSymbol ) );
+                foreach ( ISymbol fieldSymbol in uxmlTraitFields )
+                {
+                    source.AppendLine( GetAttributeInitialization( fieldSymbol , uxmlTraitAttributeSymbol ) );
+                }
+
+                source.Append( $@"        }}
+    }}" );
             }
 
-            source.Append( $@"        }}
-    }}
-    public void QueryComponents()
+            source.Append( $@"
+    public void QueryElements()
     {{
 " );
 
@@ -178,12 +184,22 @@ public partial class {classSymbol.Name}
                 return null;
 
             var args = attr.ConstructorArguments.ToList();
-            if ( args.Count != 1 )
+            if ( args.Count > 1 )
             {
                 throw new NotImplementedException( $"Attribute did not have enough parameters: expected 1 got {args.Count} {attr}: args: {args}" );
             }
 
-            var name = args[0].Value as string;
+            string name = null;
+            if ( args.Count == 1 )
+            {
+                name = args[0].Value as string;
+            }
+
+            if ( name is null )
+            {
+                name = fieldSymbol.Name;
+            }
+
             return new UiElementAttributeData()
             {
                 Name = name ,
@@ -268,6 +284,17 @@ public partial class {classSymbol.Name}
 
             var attributeName = attr.Name;
             var defaultValue = attr.defaultValue;
+
+            if ( GetTypeName( attr.Type ) == "string" )
+            {
+                defaultValue = $"\"{defaultValue}\"";
+            }
+
+            if ( defaultValue is null )
+            {
+                defaultValue = "default";
+            }
+
             return $"        private {type} {name} = new() {{ name = \"{attributeName}\" , defaultValue = {defaultValue} }};";
         }
 
