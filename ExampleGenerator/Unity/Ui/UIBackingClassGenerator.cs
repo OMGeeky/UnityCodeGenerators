@@ -113,8 +113,8 @@ public partial class {classSymbol.Name}
             return source.ToString();
         }
 
-        private string GetTypeNameFromSymbol( ISymbol           symbol ) => GetTypeName( GetTypeFromSymbol( symbol ) );
-        private string GetQualifyingTypeNameFromSymbol( ISymbol symbol ) => GetQualifyingTypeName( GetTypeFromSymbol( symbol ) );
+        private static string GetQualifyingTypeName( ITypeSymbol type ) { return type.ToDisplayString( SymbolDisplayFormat.FullyQualifiedFormat ); }
+        private string GetQualifyingTypeNameFromSymbol( ISymbol  symbol ) => GetQualifyingTypeName( GetTypeFromSymbol( symbol ) );
 
         private static UiElementAttributeData? GetUiElementAttributeData( ISymbol fieldSymbol , INamedTypeSymbol uiElementAttributeSymbol )
         {
