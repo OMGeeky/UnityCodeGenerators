@@ -12,7 +12,7 @@ namespace ExampleGenerator.Unity.Components
     [Generator]
     public class GetComponentGenerator : ISourceGenerator
     {
-        private const string _attributeText = @"
+        private const string AttributeText = @"
 using System;
 
 [AttributeUsage(AttributeTargets.Field, Inherited = true, AllowMultiple = false)]
@@ -33,7 +33,7 @@ internal class GetComponentAttribute : Attribute
 
         public void Initialize( GeneratorInitializationContext context )
         {
-            context.RegisterForPostInitialization( i => i.AddSource( "GetComponentAttribute_g.cs" , _attributeText ) );
+            context.RegisterForPostInitialization( i => i.AddSource( "GetComponentAttribute_g.cs" , AttributeText ) );
             context.RegisterForSyntaxNotifications( () => new SyntaxReceiver() );
         }
 
@@ -46,7 +46,7 @@ internal class GetComponentAttribute : Attribute
 
             foreach ( IGrouping<INamedTypeSymbol , IFieldSymbol> group in receiver.Fields
                                                                                   .GroupBy<IFieldSymbol , INamedTypeSymbol>( f => f.ContainingType
-                                                                                     , SymbolEqualityComparer.Default ) )
+                                                                                                                           , SymbolEqualityComparer.Default ) )
             {
                 var classSource = ProcessClass( group.Key , group , attributeSymbol );
                 context.AddSource( $"{group.Key.Name}_Components_g.cs" , SourceText.From( classSource , Encoding.UTF8 ) );
@@ -79,7 +79,7 @@ private void t()
 
             AttributeData attributeData = fieldSymbol.GetAttributes()
                                                      .Single( ad =>
-                                                                  ad.AttributeClass.Equals( attributeSymbol , SymbolEqualityComparer.Default ) );
+                                                                  ad.AttributeClass?.Equals( attributeSymbol , SymbolEqualityComparer.Default ) ?? false );
 
             var methodType = ProcessAttribute( attributeData );
 
@@ -89,14 +89,18 @@ private void t()
         private string ProcessAttribute( AttributeData attributeData )
         {
             var stringBuilder = new StringBuilder( "GetComponent" );
-            if ( attributeData.ConstructorArguments.Length > 0
-              && int.TryParse( attributeData.ConstructorArguments[0].Value.ToString() , out var enumValue ) )
+            var args = attributeData.ConstructorArguments;
+            if ( args.Length > 0 && int.TryParse( args[0].Value?.ToString() , out var enumValue ) )
             {
-                if ( enumValue == 1 )
-                    stringBuilder.Append( "InParent" );
-
-                if ( enumValue == 2 )
-                    stringBuilder.Append( "InChildren" );
+                switch ( enumValue )
+                {
+                    case 1:
+                        stringBuilder.Append( "InParent" );
+                        break;
+                    case 2:
+                        stringBuilder.Append( "InChildren" );
+                        break;
+                }
             }
 
             return stringBuilder.ToString();
@@ -109,24 +113,22 @@ private void t()
 
         public void OnVisitSyntaxNode( GeneratorSyntaxContext context )
         {
-            if ( context.Node is FieldDeclarationSyntax fieldDeclarationSyntax && fieldDeclarationSyntax.AttributeLists.Count > 0 )
-            {
-                foreach ( VariableDeclaratorSyntax variable in fieldDeclarationSyntax.Declaration.Variables )
-                {
-                    IFieldSymbol fieldSymbol = context.SemanticModel.GetDeclaredSymbol( variable ) as IFieldSymbol;
+            if ( !(context.Node is FieldDeclarationSyntax fieldDeclarationSyntax) || fieldDeclarationSyntax.AttributeLists.Count <= 0 )
+                return;
 
-                    if ( IsDerivedFrom( fieldSymbol?.ContainingType.BaseType , "MonoBehaviour" )
-                      && IsDerivedFrom( fieldSymbol?.Type.BaseType , "Component" )
-                      && fieldSymbol.GetAttributes()
-                                    .Any( ad => ad.AttributeClass.ToDisplayString() == "GetComponentAttribute" ) )
-                    {
-                        Fields.Add( fieldSymbol );
-                    }
+            foreach ( VariableDeclaratorSyntax variable in fieldDeclarationSyntax.Declaration.Variables )
+            {
+                if ( context.SemanticModel.GetDeclaredSymbol( variable ) is IFieldSymbol fieldSymbol
+                  && IsDerivedFrom( fieldSymbol.ContainingType.BaseType , "MonoBehaviour" )
+                  && IsDerivedFrom( fieldSymbol.Type.BaseType , "Component" )
+                  && fieldSymbol.GetAttributes().Any( ad => ad.AttributeClass?.ToDisplayString() == "GetComponentAttribute" ) )
+                {
+                    Fields.Add( fieldSymbol );
                 }
             }
         }
 
-        private bool IsDerivedFrom( INamedTypeSymbol baseType , string targetType )
+        private static bool IsDerivedFrom( INamedTypeSymbol baseType , string targetType )
         {
             while ( baseType != null )
             {
