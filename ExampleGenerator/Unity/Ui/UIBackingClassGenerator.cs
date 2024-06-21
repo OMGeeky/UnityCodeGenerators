@@ -83,10 +83,10 @@ internal class {Helpers.UiElementAttribute} : Attribute
                                                                                , SymbolEqualityComparer.Default ) )
             {
                 var classSymbol = group.Key;
-                // if (! Helpers.IsDerivedFrom( classSymbol , "AtVisualElement" ) )
-                // {
-                //     continue;
-                // }
+                if (classSymbol is null || ! Helpers.IsDerivedFrom( classSymbol , "AtVisualElement" ) )
+                {
+                    continue;
+                }
                 var classSource = ProcessClassUiElement( classSymbol , group , uiElementAttributeSymbol );
                 if ( classSource == null )
                     continue;
@@ -95,14 +95,10 @@ internal class {Helpers.UiElementAttribute} : Attribute
             }
             foreach ( var classSymbol in receiver.Classes )
             {
-                if ( classSymbol is null )
+                if (classSymbol is null || ! Helpers.IsDerivedFrom( classSymbol , "AtVisualElement" ) )
                 {
                     continue;
                 }
-                // if (! Helpers.IsDerivedFrom( classSymbol , "AtVisualElement" ) )
-                // {
-                //     continue;
-                // }
                 var classSource = ProcessClassUiComponent( classSymbol , atUiComponentAttributeSymbol );
                 if ( classSource == null )
                     continue;
@@ -167,7 +163,7 @@ internal class {Helpers.UiElementAttribute} : Attribute
 using UnityEngine.UIElements;
 namespace {classSymbol.ContainingNamespace}
 {{
-public partial class {classSymbol.Name} : AtVisualElement
+public partial class {classSymbol.Name} 
 {{");
         }
         private static void AppendClassFrameEnd( StringBuilder source )

@@ -22,21 +22,26 @@ namespace TestConsole
     public partial class Test1 : AtVisualElement
     {
          // protected override string UxmlPath =>"";
-        // [UiElement]
+        [UiElement]
         public AtVisualElement test;
     
         public void Test123()
         {
-            Console.WriteLine( "test" ); 
-            Console.WriteLine( $"UxmlPath: '{UxmlPath}'" );
+            Console.WriteLine( "test start" ); 
             QueryElements();
+            Console.WriteLine( "test end" ); 
         }
     }
 
     public abstract class AtVisualElement
     {
-        protected abstract string UxmlPath { get; }
-        // protected virtual string UxmlPath { get; }
+        protected AtVisualElement()
+        {
+            // ReSharper disable once VirtualMemberCallInConstructor
+            Console.WriteLine( $"UxmlPath: '{UxmlPath}'" );
+        }
+        // protected abstract string UxmlPath { get; }
+        protected virtual string UxmlPath { get; }
 
         protected virtual void QueryElements()
         {
