@@ -15,4 +15,8 @@
       <Compile Remove="Generators.cs" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Unity\Components\" />
+    </ItemGroup>
+
 </Project>

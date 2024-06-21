@@ -6,8 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-
-namespace ExampleGenerator.Unity.Components
+namespace GetComponentGenerator
 {
     [Generator]
     public class GetComponentGenerator : ISourceGenerator

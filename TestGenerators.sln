@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExampleGenerator", "Example
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestConsole", "TestConsole\TestConsole.csproj", "{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GetComponentGenerator", "GetComponentGenerator\GetComponentGenerator.csproj", "{F52CD30D-C7EB-42F2-B4C9-8F2AB202C1EA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B37526B-5EE6-453B-BF68-3D5B9E9BB417}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F52CD30D-C7EB-42F2-B4C9-8F2AB202C1EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F52CD30D-C7EB-42F2-B4C9-8F2AB202C1EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F52CD30D-C7EB-42F2-B4C9-8F2AB202C1EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F52CD30D-C7EB-42F2-B4C9-8F2AB202C1EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

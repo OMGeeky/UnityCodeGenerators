@@ -2,30 +2,60 @@
 
 using System.Diagnostics;
 
+using TestConsole;
 
-namespace ConsoleApp;
-
-partial class Program
+namespace TestConsole
 {
-    static void Main( string[] args ) { HelloFrom( "Generated Code" ); }
-
-    static partial void HelloFrom( string name );
-}
-
-public partial class Test1 : AtVisualElement
-{
-    // [UxmlTrait( "health" , 9 )]
-    // public int MyProperty { get; set; }
-
-    // [UxmlTrait( "health2" , 8)] public int MyField;
-    // [UxmlTrait( "health1" , 8)] public int MyField2{get; set; }
-    // [UxmlTrait( "health1" , false)] public bool MyBoolField2;
-    // [UxmlTrait( "health1" , "hi")] public string MyStringField2;
-    public void Test123()
+    static partial class Program
     {
-        Debug.Write( "test" );
-        // Test987();
+        static void Main( string[] args )
+        {
+            var t = new Test1();
+            t.Test123();
+            HelloFrom( "Generated Code" );
+        }
+
+        static partial void HelloFrom( string name );
+    }
+
+    [AtUiComponent("Test123")]
+    public partial class Test1 : AtVisualElement
+    {
+         // protected override string UxmlPath =>"";
+        // [UiElement]
+        public AtVisualElement test;
+    
+        public void Test123()
+        {
+            Console.WriteLine( "test" ); 
+            Console.WriteLine( $"UxmlPath: '{UxmlPath}'" );
+            QueryElements();
+        }
+    }
+
+    public abstract class AtVisualElement
+    {
+        protected abstract string UxmlPath { get; }
+        // protected virtual string UxmlPath { get; }
+
+        protected virtual void QueryElements()
+        {
+            Console.WriteLine( "Nothing overwriting this..." );
+        }
     }
 }
 
-public abstract class AtVisualElement { }
+namespace UnityEngine
+{
+    namespace UIElements
+    {
+        static class VisualElementExtensions
+        {
+            public static AtVisualElement Q<T>( this AtVisualElement self, string name )
+            {
+                Console.WriteLine( $"Querying for '{name}' inside type {self.GetType().Name}" );
+                return new Test1();
+            }
+        }
+    }
+}

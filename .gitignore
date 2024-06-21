@@ -1,5 +1,7 @@
 /ExampleGenerator/obj
 /TestConsole/obj/
+/GetComponentGenerator/obj/
 
 /ExampleGenerator/bin
 /TestConsole/bin
+/GetComponentGenerator/bin
