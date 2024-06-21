@@ -94,7 +94,7 @@ public partial class {classSymbol.Name}
 {{" );
 
             source.Append( $@"
-    public void QueryElements()
+    protected override void QueryElements()
     {{
 " );
 
