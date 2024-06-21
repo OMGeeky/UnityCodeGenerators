@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="Publish generators to folder" type="CompoundRunConfigurationType">
+    <toRun name="Publish ExampleGenerator to folder" type="DotNetFolderPublish" />
+    <toRun name="Publish GetComponentGenerator to folder" type="DotNetFolderPublish" />
+    <method v="2" />
+  </configuration>
+</component>
